@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import Nav from '@/components/Nav';
-import IslandsScene from '@/components/IslandsScene';
+import LandingScene from '@/components/LandingScene';
 import OfferCard, { ArcCard } from '@/components/OfferCard';
 import BookingForm from '@/components/BookingForm';
 
 export default function Home() {
   return (
     <>
-      <IslandsScene />
+      <LandingScene />
       <Nav />
       <main id="top">
         <section className="hero" data-k="hero">

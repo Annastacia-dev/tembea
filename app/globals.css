@@ -1,9 +1,9 @@
 /*
 VOICE: warm and unhurried, a field guide with a travel poster's light
-IDEA: a travel poster you fly through, one floating island per offer
-PICTURE: three low-poly islands (savanna, Kilimanjaro, Zanzibar atoll) in one live Three.js sky
-COLOUR and TYPE: the sky shifts per trip (dusk, amber, glacier blue, lagoon); one sunset accent; Outfit throughout
-LAYOUT: fixed 3D sky behind; each offer card sits beside its island, stacked under it on phones
+IDEA: one continuous journey across East Africa that the reader flies through while scrolling
+PICTURE: a live Three.js landscape: Serengeti sunrise, Kilimanjaro, Zanzibar beach, Stone Town at dusk, the harbour at night
+COLOUR and TYPE: the real sky leads (sunrise, noon, sunset, night); one sunset accent; Outfit throughout
+LAYOUT: fixed landscape behind; each offer card sits left of its scene, stacked under it on phones; a journey index on the right
 */
 :root{color-scheme:light dark;--ff:var(--font-outfit),system-ui,sans-serif;--card:light-dark(rgba(255,252,246,.93),rgba(14,18,30,.88));--ink:light-dark(#1b1712,#f4efe6);--mute:light-dark(#5b5248,#bdb4a6);--line:light-dark(rgba(27,23,18,.14),rgba(244,239,230,.16));--field:light-dark(#fff,#1b2133);--acc:#d4451a;--acc2:light-dark(#b83a12,#ff8a5c)}
 *{box-sizing:border-box;min-width:0}
@@ -11,8 +11,9 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{margin:0;background:#0f1b33;color:#fff;font:16px/1.55 var(--ff);overflow-x:clip}
 .sky{position:fixed;inset:0;background:linear-gradient(#0f1b33,#e8875b);z-index:0}
-#scene{position:fixed;inset:0;width:100%;height:100%;z-index:1;display:block}
-main,.pins{position:relative;z-index:2}
+#scene{position:fixed;inset:0;width:100%;height:100%;z-index:1;display:block;opacity:0;transition:opacity 1.2s}
+#scene.on{opacity:1}
+main{position:relative;z-index:2}
 a{color:inherit}
 nav.top{position:fixed;z-index:10;top:0;left:0;right:0;display:flex;align-items:center;gap:20px;padding:12px max(5vw,16px);backdrop-filter:blur(10px);background:rgba(10,14,26,.28)}
 .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;text-decoration:none;margin-right:auto}
@@ -25,14 +26,10 @@ nav.top .links a:hover{opacity:1;text-decoration:underline;text-underline-offset
 .btn.ghost{background:rgba(255,255,255,.14);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.5)}
 .card .btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
 :focus-visible{outline:3px solid #ffd08a;outline-offset:3px}
-.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:96px max(5vw,16px) clamp(40px,8vh,90px);text-shadow:0 2px 18px rgba(0,0,0,.35)}
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:96px max(5vw,16px) clamp(40px,8vh,90px);text-shadow:0 2px 18px rgba(0,0,0,.45);background:linear-gradient(transparent 45%,rgba(8,10,18,.5))}
 h1{font-size:clamp(34px,5vw,52px);line-height:1.05;margin:0 0 14px;max-width:16ch;text-wrap:balance;font-weight:700}
 .hero p{max-width:52ch;font-size:17px;margin:0 0 22px;opacity:.95}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.pins{position:fixed;inset:0;pointer-events:none;transition:opacity .3s}
-.pin{position:absolute;left:0;top:0;pointer-events:auto;text-decoration:none;background:rgba(255,252,246,.94);color:#1b1712;border-radius:999px;padding:8px 14px;font-weight:600;font-size:14px;white-space:nowrap;box-shadow:0 6px 20px rgba(0,0,0,.25)}
-.pin small{display:block;font-weight:400;color:#5b5248;font-size:13px}
-.pin::after{content:"";position:absolute;left:50%;bottom:-6px;margin-left:-6px;border:6px solid transparent;border-bottom:0;border-top-color:rgba(255,252,246,.94)}
 .offer{min-height:140svh;display:flex;align-items:center;padding:96px max(5vw,16px)}
 .card{background:var(--card);color:var(--ink);border-radius:22px;padding:clamp(20px,3vw,34px);max-width:500px;backdrop-filter:blur(14px);box-shadow:0 24px 60px rgba(0,0,0,.25)}
 .kick{color:var(--acc2);font-weight:600;margin:0 0 6px}
@@ -79,6 +76,17 @@ footer.foot b{color:var(--ink)}
  .est{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:18px}
 }
 @media(max-width:600px){nav.top .links{display:none}.facts b{font-size:17px}ol.plan li{grid-template-columns:minmax(0,1fr);gap:0}}
+
+/* journey index: which scene of the landscape you are in */
+.journey{position:fixed;z-index:5;right:max(2vw,12px);top:50%;transform:translateY(-50%)}
+.journey ol{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.journey button{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-height:36px;width:100%;padding:0 4px;border:0;background:none;color:#fff;font:500 14px var(--ff);cursor:pointer;text-shadow:0 1px 8px rgba(0,0,0,.7)}
+.journey button::after{content:"";width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.55);box-shadow:0 0 0 1px rgba(0,0,0,.25);transition:transform .3s,background .3s;flex:none}
+.journey button span{opacity:0;transform:translateX(6px);transition:opacity .3s,transform .3s}
+.journey button:hover span,.journey button:focus-visible span,.journey button[aria-current] span{opacity:1;transform:none}
+.journey button[aria-current]::after{background:#ffb347;transform:scale(1.5)}
+@media(max-width:1100px){.journey button span{display:none}}
+@media(max-width:600px){.journey{right:6px}}
 
 /* climb mode: a night-mountain instrument panel over the live model */
 .climb{position:fixed;inset:0;z-index:50;background:#0b1220;color:#f4efe6;font:15px/1.45 var(--ff)}

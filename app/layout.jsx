@@ -12,7 +12,7 @@ export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={outfit.variable}>
+    <html lang="en" className={outfit.variable} data-scroll-behavior="smooth">
       <body>{children}</body>
     </html>
   );

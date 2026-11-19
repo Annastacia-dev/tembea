@@ -32,7 +32,7 @@ export function ArcCard() {
   const sep = legs.reduce((s, k) => s + TRIPS[k].price, 0);
   return (
     <article className="card">
-      <p className="kick">All three · 18 days</p>
+      <p className="kick">All three · 18 days · ends in Stone Town</p>
       <h2>The full arc: plains, peak, then the coast</h2>
       <p>Done in this order, the safari days are an easy start, the climb comes while you&apos;re travel-fit, and Zanzibar is the reward. One guide team hands you to the next, and transfers between them are already booked.</p>
       <div className="arc">
