@@ -18,6 +18,7 @@ export default function OfferCard({ id }) {
         {t.plan.map(([d, x]) => <li key={d}><b>{d}</b><span>{x}</span></li>)}
       </ol>
       <ul className="inc">{t.inc.map((x) => <li key={x}>{x}</li>)}</ul>
+      {t.acts && (<><p className="sub">Things to do</p><ul className="inc acts">{t.acts.map((x) => <li key={x}>{x}</li>)}</ul></>)}
       <div className="row">
         <PlanButton trip={id}>Plan this trip</PlanButton>
         {id === 'safari' && <Link className="btn ghost" href="/safari/tarangire">Explore it in 3D</Link>}

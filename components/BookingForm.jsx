@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { TRIPS, MONTHS, usd, quote } from '@/lib/trips';
+import { TRIPS, CATS, MONTHS, usd, quote } from '@/lib/trips';
 
 export default function BookingForm() {
   const [trip, setTrip] = useState('safari');
@@ -65,7 +65,12 @@ export default function BookingForm() {
         <div className="f">
           <label htmlFor="trip">Trip</label>
           <select id="trip" value={trip} onChange={(e) => setTrip(e.target.value)}>
-            {Object.entries(TRIPS).map(([k, x]) => <option key={k} value={k}>{x.short} · {x.days} days</option>)}
+            {CATS.map((c) => (
+              <optgroup key={c.k} label={c.label}>
+                {c.trips.map((k) => <option key={k} value={k}>{TRIPS[k].short} · {TRIPS[k].days} days</option>)}
+              </optgroup>
+            ))}
+            <optgroup label="Combined"><option value="arc">{TRIPS.arc.short} · {TRIPS.arc.days} days</option></optgroup>
           </select>
         </div>
         <div className="f">

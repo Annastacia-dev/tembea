@@ -159,3 +159,18 @@ footer.foot b{color:var(--ink)}
 .z-pad .z-up{visibility:hidden}.beach.z-swim .z-pad .z-up{visibility:visible}
 @media(pointer:fine){.z-pad{display:none!important}}
 @media(max-width:760px){.z-stops .cbtn{padding:0 10px;font-size:13px}.beach .c-stats{bottom:auto;top:76px}.z-pad{bottom:170px}}
+
+/* destination categories */
+.cats{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:22px 0 0;padding:0}
+.cats a{display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:999px;text-decoration:none;font-weight:600;color:#fff;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 1px rgba(255,255,255,.45);text-shadow:none}
+.cats a:hover{background:rgba(255,255,255,.26)}
+.anchor{display:block;position:relative;top:-90px;visibility:hidden}
+.group{max-width:500px;width:100%}
+.opts{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:4px;padding:4px;margin:0 0 10px;border-radius:999px;background:var(--card);backdrop-filter:blur(14px);box-shadow:0 12px 30px rgba(0,0,0,.2)}
+.opts button{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:48px;border:0;border-radius:999px;background:transparent;color:var(--ink);font:15px var(--ff);cursor:pointer;line-height:1.15}
+.opts button span{font-size:12px;color:var(--mute)}
+.opts button[aria-selected=true]{background:var(--acc);color:#fff}
+.opts button[aria-selected=true] span{color:rgba(255,255,255,.85)}
+.card .sub{font-weight:600;font-size:14px;margin:0 0 8px}
+.inc.acts li{color:var(--ink)}
+@media(max-width:600px){nav.top .links{display:flex;gap:12px;overflow-x:auto;font-size:14px}nav.top>.btn{display:none}}

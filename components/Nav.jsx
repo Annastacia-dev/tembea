@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { CATS } from '@/lib/trips';
 
 export default function Nav() {
   return (
@@ -12,10 +13,7 @@ export default function Nav() {
         Tembea
       </Link>
       <div className="links">
-        <a href="#safari">Safari</a>
-        <a href="#kili">Kilimanjaro</a>
-        <a href="#zanzibar">Zanzibar</a>
-        <Link href="/climb/lemosho">Climb in 3D</Link>
+        {CATS.map((c) => <a key={c.k} href={`/#${c.k}`}>{c.label}</a>)}
       </div>
       <a className="btn" href="#book">Plan a trip</a>
     </nav>
