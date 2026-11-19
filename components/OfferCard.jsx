@@ -21,6 +21,7 @@ export default function OfferCard({ id }) {
       <div className="row">
         <PlanButton trip={id}>Plan this trip</PlanButton>
         {id === 'kili' && <Link className="btn ghost" href="/climb/lemosho">Climb it in 3D</Link>}
+        {id === 'zanzibar' && <Link className="btn ghost" href="/zanzibar/nungwi">Explore it in 3D</Link>}
         <span className="hint" style={{ margin: 0 }}>Best months: {t.best}</span>
       </div>
     </article>
