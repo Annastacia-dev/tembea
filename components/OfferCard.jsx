@@ -2,6 +2,16 @@ import Link from 'next/link';
 import PlanButton from './PlanButton';
 import { TRIPS, usd } from '@/lib/trips';
 
+// every destination opens in its own 3D experience
+const THREE_D = {
+  safari: '/safari/tarangire',
+  kili: '/climb/lemosho',
+  zanzibar: '/zanzibar/nungwi',
+  diani: '/diani/diani',
+  stonetown: '/stonetown/rooftop',
+  mombasa: '/mombasa/oldtown',
+};
+
 export default function OfferCard({ id }) {
   const t = TRIPS[id];
   return (
@@ -21,9 +31,7 @@ export default function OfferCard({ id }) {
       {t.acts && (<><p className="sub">Things to do</p><ul className="inc acts">{t.acts.map((x) => <li key={x}>{x}</li>)}</ul></>)}
       <div className="row">
         <PlanButton trip={id}>Plan this trip</PlanButton>
-        {id === 'safari' && <Link className="btn ghost" href="/safari/tarangire">Explore it in 3D</Link>}
-        {id === 'kili' && <Link className="btn ghost" href="/climb/lemosho">Climb it in 3D</Link>}
-        {id === 'zanzibar' && <Link className="btn ghost" href="/zanzibar/nungwi">Explore it in 3D</Link>}
+        {THREE_D[id] && <Link className="btn ghost" href={THREE_D[id]}>{id === 'kili' ? 'Climb it in 3D' : 'Explore it in 3D'}</Link>}
         <span className="hint" style={{ margin: 0 }}>Best months: {t.best}</span>
       </div>
     </article>

@@ -2,12 +2,31 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { STOPS } from '@/lib/zanzibar';
+import * as ZNZ from '@/lib/zanzibar';
+import * as DIANI from '@/lib/diani';
 
-export default function BeachExperience({ initialStop }) {
+const PLACES = {
+  zanzibar: {
+    data: ZNZ, title: 'Zanzibar in 3D', loading: 'Building the coast…',
+    label: "3D model of Zanzibar's northern coast, its lagoon and reef",
+    h2: 'Zanzibar, as you’ll live it',
+    intro: 'Step into four moments of the trip on a model of the northern coast: walk the beach, snorkel the reef with a turtle, sail a dhow into the sunset, and sit by the fire under the stars. Change the time of day as you go.',
+    fine: 'The coast is a modelled impression of Nungwi, not a survey, and the reef sits much closer to the beach than Mnemba really is.',
+  },
+  diani: {
+    data: DIANI, title: 'Diani in 3D', loading: 'Building the coast…',
+    label: '3D model of Diani Beach, the Kongo River mouth and the coral platform at Tiwi',
+    h2: 'Diani, as you’ll live it',
+    intro: 'Step into four moments of the trip on a model of the Kenyan south coast: sunrise on Diani Beach, dolphins and coral at Kisite-Mpunguti, the African Map Pool at low tide, and sunset at the Kongo River. Change the time of day as you go.',
+    fine: 'The coast is a modelled impression, not a survey: Tiwi, Diani and Kisite-Mpunguti (off Wasini, far to the south) are drawn much closer together than they are.',
+  },
+};
+
+export default function BeachExperience({ initialStop, place = 'zanzibar' }) {
   const root = useRef(null);
   const router = useRouter();
-  const [status, setStatus] = useState('Building the coast…');
+  const P = PLACES[place];
+  const [status, setStatus] = useState(P.loading);
 
   useEffect(() => {
     let destroy;
@@ -16,12 +35,13 @@ export default function BeachExperience({ initialStop }) {
         const { createBeach } = await import('@/lib/beachEngine');
         if (!root.current) return;
         destroy = createBeach(root.current, {
+          place,
           stop: initialStop,
           onStop: (k) => {
-            window.history.replaceState(null, '', `/zanzibar/${k}`);
-            document.title = `Zanzibar in 3D: ${STOPS[k].name} · Tembea`;
+            window.history.replaceState(null, '', `/${place}/${k}`);
+            document.title = `${P.title}: ${P.data.STOPS[k].name} · Tembea`;
           },
-          onExit: () => router.push('/#zanzibar'),
+          onExit: () => router.push(`/#${place}`),
         });
         setStatus('');
       } catch (err) {
@@ -30,28 +50,28 @@ export default function BeachExperience({ initialStop }) {
       }
     }, 40);
     return () => { clearTimeout(timer); destroy?.(); };
-  }, [initialStop, router]);
+  }, [initialStop, place, router, P]);
 
   return (
     <div className="climb beach" ref={root}>
-      <canvas id="zv" aria-label="3D model of Zanzibar's northern coast, its lagoon and reef" />
+      <canvas id="zv" aria-label={P.label} />
       <div className="z-mask" aria-hidden="true" />
       {status && <div className="c-load">{status}</div>}
       <div className="c-top">
-        <Link className="cbtn" href="/#zanzibar">← Back to trips</Link>
-        <div className="c-title"><b id="zTitle">Zanzibar in 3D</b><span id="zSub">Choose a moment to begin</span></div>
+        <Link className="cbtn" href={`/#${place}`}>← Back to trips</Link>
+        <div className="c-title"><b id="zTitle">{P.title}</b><span id="zSub">Choose a moment to begin</span></div>
         <div className="seg">
           <button className="cbtn" id="zAuto" aria-pressed="true">Stroll</button>
           <button className="cbtn" id="zSound" aria-pressed="false">Sound</button>
         </div>
       </div>
       <aside className="glass c-pick" id="zPick">
-        <h2>Zanzibar, as you&apos;ll live it</h2>
-        <p>Step into four moments of the trip on a model of the northern coast: walk the beach, snorkel the reef with a turtle, sail a dhow into the sunset, and sit by the fire under the stars. Change the time of day as you go.</p>
+        <h2>{P.h2}</h2>
+        <p>{P.intro}</p>
         <div className="c-routes z-list" id="zStops" />
         <div className="c-detail" id="zDetail" />
         <button className="btn" id="zStart" style={{ width: '100%' }}>Step in</button>
-        <p className="c-fine">Drag to look around. Walk or swim with W/A/S/D or the arrow keys (on-screen pad on touch screens), Shift to go faster, P to pause the guided walk, N for the next moment, Esc to leave. The coast is a modelled impression of Nungwi, not a survey, and the reef sits much closer to the beach than Mnemba really is.</p>
+        <p className="c-fine">Drag to look around. Walk or swim with W/A/S/D or the arrow keys (on-screen pad on touch screens), Shift to go faster, P to pause the guided walk, N for the next moment, Esc to leave. {P.fine}</p>
       </aside>
       <aside className="glass c-stats" id="zStats" hidden>
         <div className="alt"><span>Local time</span><b id="zTime">–</b></div>
